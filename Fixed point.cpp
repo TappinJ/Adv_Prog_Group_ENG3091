@@ -8,10 +8,13 @@ double g(double x) {                //define function for g(x) and pass in x (pa
 }
 
 double fixed_point(double x0, int niters = 1000, double tol = 1e-6) {       // Function for Fixed point iteration 
-    double xold = x0;               // define variable
+    double xold{};                     // define variable
+    double xnew{};
+
+    xold = x0;               
 
     for (int i = 1; i <= niters; i++) {         // loop for each iteration
-        double xnew = g(xold);      // function call to g()
+        xnew = g(xold);      // function call to g()
    
         if (std::abs(xnew - xold) < tol) {      // compare values (convergence check)
             std::cout << "Solution converges at iteration step " << i << std::endl;
@@ -27,12 +30,14 @@ double fixed_point(double x0, int niters = 1000, double tol = 1e-6) {       // F
 
 
 int main() {
-    double sqrt_of_five = fixed_point(2.0);     // function call to fixed point solver
-    double ans = std::sqrt(5.0);               // define variable to find square root
+    double sqrt_of_five{};
+    double ans{};
+
+    sqrt_of_five = fixed_point(2.0);     // function call to fixed point solver
+    ans = std::sqrt(5.0);               // define variable to find square root
     std::cout << "sqrt(5)            = " << sqrt_of_five << std::endl;
     std::cout << "sqrt(5) using math = " << ans << std::endl;
 
     return 0;
 }
-
 
