@@ -1,52 +1,75 @@
 #include <iostream>                 // for std::cout
 #include <cmath>  
-#include <Eigen/Dense>
-#include "matplotlibcpp.h"
-namespace plt = matplotlibcpp;
+#include <vector>
 
-
-double f(x){
+double f(double x){
   return std::exp(-0.1 * x) * std::sin(2 * x); 
 }
 
-void df(x){
+double df(double x){
   double exp = std::exp(-0.1 * x);
-  double trig = (2 * std::cos(2 * x)) - (o.1 * std::sin(2 * x));
-  return exp, trig;
+  double trig = (2 * std::cos(2 * x)) - (0.1 * std::sin(2 * x));
+  return exp * trig;
 }
 
-double newtoon_raphson(double func, double dfunc, double x0, niters=100, tol=1e-6){
-  double xold;
-  double xnew;
-  
-  xold = x0;
-  for (int i = 0, i <= niters; i++){
+double newton_raphson(double x0, int niters=100, double tol=1e-6){ 
+  double xold{x0};
+  for (int i = 1; i <= niters; i++){
 
-    double fval {func(xold)};
-    double dfval {dfunc(xold)};
+    double fval {f(xold)};
+    double dfval {df(xold)};
     if (std::abs(dfval) < 1e-15){
       std::cout << "Divergence: Derivative is zero at x = " << xold << "at iteration " << i << std::endl;
-    xnew = xold - fval / dfval;
     } 
 
+    double xnew {xold - fval / dfval};
+
     if (std::abs(xnew - xold) < tol){
-      std::cout << "solution converges at step " << i+1 << std::endl;
+      std::cout << "solution converges at step " << i << std::endl;
       return xnew;
     }
     xold = xnew;
   }
-  std::cout << "Divergence: Root not found within the defined number of iterations and tolerance" << std::endl
+  std::cout << "Divergence: Root not found within the defined number of iterations and tolerance" << std::endl;
+  return xold;
 }
 
+void graph(){
+  std::vector<double> x;
+  std::vector<double> h;
 
+  double N{10.0 / 1000.0};
 
+  for (int i = 0; i <= 1000; i++) {
+    
+    x.push_back(i * N);
+    h.push_back(std::exp(-0.1 * (i * N)) * std::sin(2 * (i * N)));
+
+  }
+
+  
+
+}
 
 int main() {
-  double x = Eigen::VectorXd::LinSpaced(1000, 0, 10);
-  double h = std::exp(-0.1 * x) * np.sin(2 * x);
-  std::vector<double> x = {x};
-  std::vector<double> y = {h};
 
-  plt::plot(x, y, x, std::zeros_like(x));
-  plt::show();
+  std::vector<double> roots;
+  std::vector<double> x0_list;
+
+  for (int i = 0; i < 7; i++) {
+    x0_list.push_back(1.5 * i);
+  }
+
+  for (double x0:x0_list) {
+    double root{newton_raphson(x0)};
+    roots.push_back(root);
+  }
+
+  for (double r : roots) {
+    std::cout << r <<  " ";
+  }
+
+  std::cout << std::endl;
+
+  return 0;
 }
