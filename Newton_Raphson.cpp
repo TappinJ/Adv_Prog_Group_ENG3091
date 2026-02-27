@@ -1,6 +1,7 @@
 #include <iostream>                 // for std::cout
 #include <cmath>  
 #include <vector>
+#include "Task1a.h"           // for function prototypes
 
 double f(double x){
   return std::exp(-0.1 * x) * std::sin(2 * x); 
@@ -52,24 +53,28 @@ void graph(){
 }
 
 int main() {
+    
+    Run();
 
-  std::vector<double> roots;
-  std::vector<double> x0_list;
+    std::cout << "Newton Raphson Calculation\n";
 
-  for (int i = 0; i < 7; i++) {
-    x0_list.push_back(1.5 * i);
-  }
+    std::vector<double> roots;
+    std::vector<double> x0_list;
 
-  for (double x0:x0_list) {
-    double root{newton_raphson(x0)};
-    roots.push_back(root);
-  }
+    for (int i = 0; i < 7; i++) {
+        x0_list.push_back(1.5 * i);
+    }
 
-  for (double r : roots) {
-    std::cout << r <<  " ";
-  }
+    for (double x0:x0_list) {
+        double root{newton_raphson(x0)};
+        roots.push_back(root);
+    }
 
-  std::cout << std::endl;
+    for (double r : roots) {
+        std::cout << r <<  " ";
+    }
 
-  return 0;
+    std::cout << std::endl;
+
+    return 0;
 }
