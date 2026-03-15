@@ -28,6 +28,8 @@ struct SLR_gradient
     std::vector<double> x;
     std::vector<double> y;
 
+    // Making member variables
+    // so they can be used in a comparison function
     double w{0};
     double b{0};
     const double n{0.001};      // Learning Rate
