@@ -112,6 +112,11 @@ struct MLR_gradient{
     std::vector<double> x2;
     std::vector<double> y;
 
+    double w1 = 0.0;
+    double w2 = 0.0;
+    double b = 0.0;
+    const double n = 0.001;
+
     // 1 == DATA LOADER
     void dataset(){
         std::ifstream file("multi_dataset.csv");
@@ -156,11 +161,7 @@ void compute_gradients(double w1, double w2, double b,
 
 // 3 == MAIN SOLVER LOOP ==
 void solve(){
-    double w1 = 0.0;
-    double w2 = 0.0;
-    double b = 0.0;
-    const double n = 0.001;
-
+    
     for(int i=0; i<10000; i++){
         double step_w1{};
         double step_w2{};
