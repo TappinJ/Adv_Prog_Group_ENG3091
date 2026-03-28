@@ -23,5 +23,10 @@ int main(){
     std::cout << "w difference = " << w_error << std::endl;
     std::cout << "b difference = " << b_error << std::endl;   
 
+    // 5 == Data Quality Analysis
+    double r = pearson_correlation(gradient.x, gradient.y);
+    std::cout << "\n ===Data Quality===" << std::endl;
+    std::cout << "Pearson correlation (r) = " << r << std::endl;
+    std::cout << "R-squared (r^2)) = " << (r * r) << std::endl;
     return 0;
 }

@@ -1,7 +1,9 @@
+// gradient_combined.h
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 // === SAFETY CHECK FUNCTION ===
 bool safety_check(std::ifstream& file, std::string filename){
@@ -178,3 +180,38 @@ void solve(){
 }
 
 };
+
+//============================================
+// TOOL 3 == Pearson Correlation Coefficient
+//============================================
+
+double pearson_correlation(const std::vector<double>& x, const std::vector<double>& y) {
+    size_t n{x.size()};
+
+    double sumXY{0.0};
+    double sumX{0.0};
+    double sumY{0.0};
+    double sumX_squared{0.0};
+    double sumY_squared{0.0};
+
+    for(size_t i=0; i < n; i++) {
+        sumXY += x[i] * y[i];
+        sumX += x[i];
+        sumY += y[i];
+        sumX_squared += x[i] * x[i];
+        sumY_squared += y[i] * y[i];
+    }
+
+    // Calculate the numerator and denominator
+    double num{(n * sumXY) - (sumX * sumY)};
+    double den{std::sqrt((n * sumX_squared - (sumX*sumX)) * (n * sumY_squared - (sumY*sumY)))};
+
+    // Safety Check
+     if(den == 0.0) {
+        std::cout << "Error: Cannot calculate correlation as denominator is zero.\n";
+        return 0.0;
+    }
+
+    double r{num / den};
+    return r;
+}
