@@ -11,10 +11,6 @@ struct data
     void dataset(){
         std::ifstream file("dataset.csv");
 
-        if(!file){
-        std::cout << "Error: dataset.csv not found!" << std::endl;
-        return;
-    }
         std::string header;
         std::getline(file, header);
 
