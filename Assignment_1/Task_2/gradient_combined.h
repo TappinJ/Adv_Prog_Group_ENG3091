@@ -221,11 +221,24 @@ void solve(){
         b = b - n*step_b;
     }
 
-    // Output of the final converged parameters.
-    std::cout << "===MLR Gradient Descent Result===\n";
-    std::cout << "w1 = " << w1 << "\n";
-    std::cout << "w2 = " << w2 << "\n";
-    std::cout << "b = " << b << "\n";
+    // 4 == Mean Squared Error
+    // Quantifies the model accuracy by calculating the Loss Function 
+    // Const ensures that this new function (calculate_mse) doesnt modify any of the gradient variables
+    // Turns the function into a "read-only" operation.
+    double calculate_mse() const {
+        double total_squared_error{0.0};
+        size_t m = y.size();
+
+        for (size_t i = 0; i < m; i++) {
+            // Prediction based on the calculated parameters
+            double prediction = (w1 * x1[i]) + (w2 * x2[i]) + b;
+            double residual = prediction - y[i];
+            total_squared_error += (residual * residual);
+        }
+
+        // Returns the loss scaled by 2m
+        return total_squared_error / (2.0 * m);
+    }
 }
 
 };
