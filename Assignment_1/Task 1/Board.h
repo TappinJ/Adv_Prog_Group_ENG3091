@@ -6,7 +6,7 @@
 class Board
 {
     private:
-        std::vector<std::vector<char>> board_;                                                          // Private member variable storing the board stater
+        std::vector<std::vector<char>> board_;                                                          // Private member variable storing the board state
 
         void create_() {                                                                                // Private function to create and initialize the tic tac toe board
             // Loop to create rows

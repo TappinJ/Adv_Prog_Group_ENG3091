@@ -36,8 +36,23 @@ class play
         return false;                                                                               // Return false if input out of range
     }
 
-    void computer(std::vector<std::vector<char>>& board){                                           // Function for computer to make random move
-        char a{false};                                                                              // initialise computer move validity
+    void computer(std::vector<std::vector<char>>& board){                                           // Function for computer to make random move    
+        bool boardFull = true;                                                                      //Check if board is full
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == '.') {
+                    boardFull = false;
+                    break;
+                }
+            }
+            if (boardFull == false) break;
+        }
+    
+        // Only let computer move if there's space
+        if (boardFull == true) return;
+
+        bool a{false};                                                                              // initialise computer move validity
 
         while (a == false){                                                                         // Loop until computer finds empty space
             int row = std::rand() %3;                                                               // Generate random row (0-2)

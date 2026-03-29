@@ -1,63 +1,27 @@
 #include <iostream>                                                                                 // For std::cout
-#include "play.h"                                                                                   // Header for play structure
-#include "Board.h"                                                                                  // Header for Board structure
 #include <vector>                                                                                   // For std::vector
+#include <cstdlib>                                                                                  // For std::rand() and std::srand()
+#include <ctime>                                                                                    // For std::time()
+#include "play.h"                                                                                   // Header for play class
+#include "Board.h"                                                                                  // Header for Board class
+#include "GameResult.h"                                                                             // Header for gameWon class
 
-
-std::pair<bool, bool> gameWon(std::vector<std::vector<char>>& board){                               // Function to determine winner
-    std::pair<bool, bool> result{false, false};                                                     // Initialise gameover and player Win, will change if the player wins or losses
-                                                                   
-
-    // Loop for horizontal win
-    for (int i = 0; i < 3; i++ ) {                                                                  
-        if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != '.') {       // Check if there are three X's or o's in a row
-            result.first = {true};                                                                  // Set gameover to true
-            if (board[i][0] == 'x') {                                                               // Check if player won
-                result.second = {true};                                                             // Set player won to true
-            }
-        }
-    }
-
-    // Loop for vertical win
-    for (int i = 0; i < 3; i++) {
-        if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != '.') {       // Check if there are three X's or o's in a column
-            result.first = {true};                                                                  // Set gameover to true
-            if (board[0][i] == 'x') {                                                               // Check if player won
-                result.second = {true};                                                             // Set player won to true
-            }
-        }
-    }
-
-    // Check for a diagonal win
-    if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '.') {           // Check if there are three X's or O's in a diagonal from left to right
-        result.first = {true};                                                                      // Set gameover to true
-        if (board[0][0] == 'x') {                                                                   // Check if player won
-            result.second = {true};                                                                 // Set player won to true                 
-        }                                          
-    }                
-    
-    if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != '.') {           // Check if there are three X's or O's in a diagonal from right to left
-        result.first = {true};                                                                      // Set gameover to true
-        if (board[0][2] == 'x') {                                                                   // Check if player won
-            result.second = {true};                                                                 // Set player won to true
-        }
-    }
-
-    return result;                                                                                  // Return game Won and game over decision
-}
-    
+                     
 
 int main(){
-    Board base;                                                                                     // Create an object of Board structure
-    play moves;                                                                                     // Create an object of play structure
+    std::srand(std::time(0));                                                                       // Seed the random number generator
+    Board base;                                                                                     // Create an object of Board class
+    play moves;                                                                                     // Create an object of play class
+    gameWon result;                                                                                 // Create an object of gameWon class
     
-    std::vector<std::vector<char>>& board = base.getBoard();                                           // Create the tic tac toe board
-    std::pair<bool, bool> result = gameWon(board);                                                  // Check if the game is won initially
-    bool& gameOver = result.first;                                                                   // Take gameover status from result
-    bool& playerWin = result.second;                                                                 // Take playerWin status from result
+    std::vector<std::vector<char>>& board = base.getBoard();                                        // Create the tic tac toe board
+    result.checkWin(board);                                                                         // Check if the game is won initially
+    bool& gameOver = result.gameover;                                                               // Take gameover status from result
+    bool& playerWin = result.playerWin;                                                              // Take playerWin status from result 
+    bool& draw = result.draw;                                                                       // Take draw status from result
 
     while (gameOver == false){                                                                      // Loop until the game is over
-        base.displayboard();                                                                   // Display the current state of the board
+        base.displayboard();                                                                        // Display the current state of the board
         double position;
         bool valid{false};                                                                          // Initialise players move validity
 
@@ -69,16 +33,19 @@ int main(){
         
         moves.computer(board);                                                                      // Computer moves
 
-        std::pair<bool, bool> result = gameWon(board);                                              // Check if the game has been won after both moves
-        gameOver = result.first;                                                                    // Update gameover status
-        playerWin = result.second;                                                                  // Update playerWin status
+        result.checkWin(board);                                                                     // Check if the game has been won after both moves
+        gameOver = result.gameover;                                                                 // Update gameover status
+        playerWin = result.playerWin;                                                               // Update playerWin status
+        draw = result.draw;                                                                         // Update draw status
     };
     
-    base.displayboard();                                                                       // Display the final game board
+    base.displayboard();                                                                            // Display the final game board
     
     // Check for the Winner
-    if (playerWin == true){
+    if (playerWin == true) {
         std::cout << "Game Over! You won\n" << std::endl;
+    } else if (draw == true) {
+        std::cout << "Game Over! It was a draw\n" << std::endl;
     } else {
         std::cout << "Game Over Loser!!!\n";
     }
