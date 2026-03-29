@@ -1,24 +1,30 @@
 //Board.h
-#include <iostream>                                                                                 // For std::cout
-#include <vector>                                                                                   // For std::vector
+#include <iostream>                                                                                     // For std::cout
+#include <vector>                                                                                       // For std::vector
 
-// Structure created to make the game board
-struct Board
+// Class created to make the game board
+class Board
 {
-    std::vector<std::vector<char>> create() {                                                       // Function to create and initialize the tic tac toe board
-        std::vector<std::vector<char>> board;                                                       // Create empty 2D vector
-        // Loop to create rows
-        for (int i = 0; i < 3; i++){                                                                
-            std::vector<char> row = {'.','.','.'};                                                  
-            board.push_back(row);                                                                   // Add row to board
-        }
-        return board;                                                                               // Return completed 3x3 board
-    }
+    private:
+        std::vector<std::vector<char>> board_;                                                          // Private member variable storing the board stater
 
-    void displayboard(std::vector<std::vector<char>>& board) {                                      // Function to display the current board state
-        for (int i = 0; i < 3; i++) {                                                               
-            std::cout << board[i][0] << " " << board[i][1] << " " << board[i][2] << std::endl;      // Display row with spaces between cells
+        void create_() {                                                                                // Private function to create and initialize the tic tac toe board
+            // Loop to create rows
+            for (int i = 0; i < 3; i++){                                                                
+                std::vector<char> row = {'.','.','.'};                                                  
+                board_.push_back(row);                                                                  // Add row to private member board
+            }
         }
-    }
-};
     
+    public:
+        Board() {create_();}                                                                            // Initialize the board when object is created
+
+        void displayboard() {                                                                           // Function to display the current board state
+            for (int i = 0; i < 3; i++) {                                                               
+                std::cout << board_[i][0] << " " << board_[i][1] << " " << board_[i][2] << std::endl;   // Display row with spaces between cells
+            }
+        }
+        std::vector<std::vector<char>>& getBoard() {return board_;}                                     // Public accessor to get the board
+            
+        
+};

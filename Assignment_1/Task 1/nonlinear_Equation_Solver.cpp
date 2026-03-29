@@ -31,7 +31,7 @@ int main() {
         std::cout << r <<  " ";
     }
 
-    std::cout << std::endl;                             // Move to next line
+    std::cout << "\n" << std::endl;                             // Move to next line
 
     // Variables for Fixed Point method
     double sqrt_of_five{};                              // Store approximation of sqrt(5)
@@ -44,5 +44,5 @@ int main() {
     
     // Print results
     std::cout << "sqrt(5)            = " << sqrt_of_five << std::endl;
-    std::cout << "sqrt(5) using math = " << ans << "\n" << std::endl;
+    std::cout << "sqrt(5) using sqrt function = " << ans << "\n" << std::endl;
 }

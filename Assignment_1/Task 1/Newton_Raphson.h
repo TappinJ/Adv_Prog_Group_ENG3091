@@ -6,18 +6,18 @@
 class Newton
 {
   private:
-    double f(double &x){             // Private member function that takes an x value and returns f(x)
+    double f(const double &x){             // Private member function that takes an x value and returns f(x)
     return std::exp(-0.1 * x) * std::sin(2 * x); 
     }
   
-    double df(double &x){            // Private member function to return the derivative of x
+    double df(const double &x){            // Private member function to return the derivative of x
     double exp = std::exp(-0.1 * x);
     double trig = (2 * std::cos(2 * x)) - (0.1 * std::sin(2 * x));
     return exp * trig;
   }
 
   public:
-    double newton_raphson(double &x0, int niters=100, double tol=1e-6){  // Main solver with x0 as initial guess for the root, niters as maximum iterations, and tol as tolerance
+    double newton_raphson(const double &x0, int niters=100, double tol=1e-6){  // Main solver with x0 as initial guess for the root, niters as maximum iterations, and tol as tolerance
     // Returns the approximate root as a double
 
     double xold{x0};                                                    // Initialize current approximation to the starting guess x0       

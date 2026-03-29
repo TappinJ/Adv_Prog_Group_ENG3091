@@ -51,13 +51,13 @@ int main(){
     Board base;                                                                                     // Create an object of Board structure
     play moves;                                                                                     // Create an object of play structure
     
-    std::vector<std::vector<char>> board = base.create();                                           // Create the tic tac toe board
+    std::vector<std::vector<char>>& board = base.getBoard();                                           // Create the tic tac toe board
     std::pair<bool, bool> result = gameWon(board);                                                  // Check if the game is won initially
-    bool gameOver = result.first;                                                                   // Take gameover status from result
-    bool playerWin = result.second;                                                                 // Take playerWin status from result
+    bool& gameOver = result.first;                                                                   // Take gameover status from result
+    bool& playerWin = result.second;                                                                 // Take playerWin status from result
 
     while (gameOver == false){                                                                      // Loop until the game is over
-        base.displayboard(board);                                                                   // Display the current state of the board
+        base.displayboard();                                                                   // Display the current state of the board
         double position;
         bool valid{false};                                                                          // Initialise players move validity
 
@@ -69,12 +69,12 @@ int main(){
         
         moves.computer(board);                                                                      // Computer moves
 
-        std::pair<char, char> result = gameWon(board);                                              // Check if the game has been won after both moves
+        std::pair<bool, bool> result = gameWon(board);                                              // Check if the game has been won after both moves
         gameOver = result.first;                                                                    // Update gameover status
         playerWin = result.second;                                                                  // Update playerWin status
     };
     
-    base.displayboard(board);                                                                       // Display the final game board
+    base.displayboard();                                                                       // Display the final game board
     
     // Check for the Winner
     if (playerWin == true){

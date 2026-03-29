@@ -2,9 +2,10 @@
 #include <iostream>                                                                                             // For std::cout
 #include <vector>                                                                                               // For std::vector
 
-// Structure created for player and computer to make their moves
-struct play
+// Class created for player and computer to make their moves
+class play
 {
+    public:
     bool player(std::vector<std::vector<char>>& board, double& positionP){
         int numberPlacement[10][2] = {                                                              // Array mapping numpad positions to board coordinates
         {-1, -1},   // 0 

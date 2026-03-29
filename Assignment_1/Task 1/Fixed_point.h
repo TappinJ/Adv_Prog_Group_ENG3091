@@ -6,7 +6,7 @@
 class Fixed
 {
     private:
-        double g(double &x) {               // Private member function takes x value and returns g(x)
+        double g(const double &x) {               // Private member function takes x value and returns g(x)
             return 0.5 * (x + 5 / x);       // return the result of g(x)
         }
     
