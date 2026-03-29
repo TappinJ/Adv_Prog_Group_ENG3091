@@ -22,6 +22,7 @@ bool safety_check(std::ifstream& file, std::string filename){
     return true;        // Dataset exists!
 }
 
+
 //=========================================
 // TOOL 1 == SIMPLE LINEAR REGRESSION (SLR)
 //=========================================
@@ -40,6 +41,7 @@ struct SLR_gradient
     void dataset(){
         std::ifstream file("single_dataset.csv");
 
+        // Calling the safety check - checking if the file exists and has data
         if(!safety_check(file, "single_dataset.csv")) return;
     
         std::string header;
@@ -53,7 +55,7 @@ struct SLR_gradient
         }
     }
     // 2 == Derivative functions
-double deriv_w(const std::vector<double>& x,
+    double deriv_w(const std::vector<double>& x,
                const std::vector<double>& y,
                double w, double b)
 {
@@ -101,6 +103,18 @@ void solve(){
     std::cout << "w = " << w << std::endl;
     std::cout << "b = " << b << std::endl;
 }
+
+// === SLR Prediction Function ===
+std::vector<double> predict() const{
+    std::vector<double> predictions;
+    size_t m=y.size();
+
+    for(size_t i=0; i<m; i++){
+        predictions.push_back((w*x[i]) + b);
+    }
+    return predictions;
+}
+
 };
 
 //=======================================
@@ -240,6 +254,18 @@ struct MLR_gradient{
         // Returns the loss scaled by 2m
         return total_squared_error / (2.0 * m);
     }
+
+    // === MLR PREDICTION FUNCTION ===
+    // Generates a vector of y values based on learned parameters.
+    // Multiple features (x1, x2) and multiple weights (w1, w2).
+    std::vector<double> predict() const{
+        std::vector<double> predictions;
+        size_t m = y.size();
+        for(size_t i=0; i<m; i++){
+            predictions.push_back((w1*x1[i]) + (w2*x2[i]) + b);
+        }
+        return predictions;
+}
 
 };
 
