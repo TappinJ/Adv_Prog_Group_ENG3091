@@ -1,5 +1,8 @@
 #include "gradient_combined.h"
+#include "metrics.h"
 #include <iomanip>
+#include <vector>
+#include <iostream>
 
 int main() {
     MLR_gradient solver;
@@ -16,18 +19,26 @@ int main() {
     double final_b  = solver.b;
     double final_error = solver.calculate_mse();
 
-    // 4 - Output results for Task 2 Report [cite: 281, 282]
+    // 4 - Calculating the accuracy of the model (R^2)
+    std::vector<double> predictions = solver.predict();
+    double Rsquared = calculate_Rsquared(solver.y, predictions);
+
+    // 5 - Output results for Task 2 Report
     std::cout << "--- GRADIENT DESCENT COMPARISON ---" << std::endl;
     std::cout << "Learned Weights: [" << final_w1 << ", " << final_w2 << "]" << std::endl;
     std::cout << "Learned Bias:    " << final_b << std::endl;
     std::cout << "Mean Squared Error: " << final_error << std::endl;
     
-// 5 - Display the Final Model Equation 
+// 6 - Display the Final Model Equation 
 // Represents the final function
 std::cout << "\n--- FINAL PREDICTION MODEL ---" << std::endl;
-std::cout << std::fixed << std::setprecision(4); // Clean formatting for the report
+std::cout << std::fixed << std::setprecision(4);
 std::cout << "Equation: y = (" << final_w1 << ")x1 + (" 
           << final_w2 << ")x2 + (" << final_b << ")" << std::endl;
+
+// Display the accurace as % (using R^2)
+// Multiplying by 100 to convert to %
+std::cout <<"Model predictability:" <<(Rsquared*100.0) << "%" << std::endl;
     
     return 0;
 }
