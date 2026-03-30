@@ -28,16 +28,19 @@ bool safety_check(std::ifstream& file, std::string filename){
 //=========================================
 struct SLR_gradient
 {
+    // Data containers for independent (x) and dependent (y) variables
     std::vector<double> x;
     std::vector<double> y;
 
-    // Making member variables
+    // Model parameters made into member variables
     // so they can be used in a comparison function
+    // Brace initialisation used to set baseline state
     double w{0};
     double b{0};
-    const double n{0.001};      // Learning Rate
+    const double n{0.001};      // Learning Rate, step-size definintion for optimising. 
 
     // 1 == Data Loader
+    // encapsulated I/O logic to populate member vectors
     void dataset(){
         std::ifstream file("single_dataset.csv");
 
@@ -49,27 +52,32 @@ struct SLR_gradient
 
         double xt, yt;
         char c; 
+        // parsing loop, exttracts CSV valaues into temporary doubles
         while (file >> xt >> c >> yt) {
         x.push_back(xt);
         y.push_back(yt);
         }
     }
     // 2 == Derivative functions
+    // Calculates the partial derivative of the cost function w.r.t w
+    // Uses const references to vectors to prevent redundant memory allocation
     double deriv_w(const std::vector<double>& x,
                const std::vector<double>& y,
                double w, double b)
 {
     double deriv = 0.0;
-    int m = x.size();
+    int m = x.size();   // Sample count for scaling the gradient
 
     for(int i = 0; i < m; i++)
     {
+        // Accumulating the gradient (prediction - actual) * input
         deriv += (w * x[i] + b - y[i]) * x[i];
     }
-
+    // returning the mean gradient across the batch
     return deriv / m;
 }
 
+// Calculating the partial derivative w.r.t. bias b
 double deriv_b(const std::vector<double>& x,
                const std::vector<double>& y,
                double w, double b)
@@ -79,6 +87,7 @@ double deriv_b(const std::vector<double>& x,
 
     for(int i = 0; i < m; i++)
     {
+        // the bias gradient is independent of the input value x[i]
         deriv += (w * x[i] + b - y[i]);
     }
 
@@ -86,29 +95,37 @@ double deriv_b(const std::vector<double>& x,
 }
 
 // 3 == SLR - Main Solver Logic
+// iterative optimisation engine
 void solve(){
+    // Safety check: prevents execution in case of empty vectors
     if (x.empty()){
         std::cout << "Error: No data loaded.\n";
         return;
     }
 
     // Iterative Gradient Descent Loop
+    // 10000 passes 
     for(int i = 0; i < 10000; i++)
     {
+        // Simultaneous update rule: Parameter = current - (LR * gradient)
         w = w - n * deriv_w(x, y, w, b);
         b = b - n * deriv_b(x, y, w, b);
     }
 
+    // Printing functions. in MLR these were taken out of the header file. Left here for time being. 
     std::cout << "===SLR Gradient Descent Result===" << std::endl;
     std::cout << "w = " << w << std::endl;
     std::cout << "b = " << b << std::endl;
 }
 
 // === SLR Prediction Function ===
+// Inference
+// const-quantified as it performs a read-only transformation of input data
 std::vector<double> predict() const{
     std::vector<double> predictions;
     size_t m=y.size();
 
+    // Mapping of the learned linear relationship to the input vector.
     for(size_t i=0; i<m; i++){
         predictions.push_back((w*x[i]) + b);
     }
@@ -135,7 +152,7 @@ struct MLR_gradient{
     double w2{};
     double b{};
     // n is the learning rate, controls the step size during the gradient descent. 
-        const double n{0.001};          // Value of 0.001 chosen to ensure stable convergence
+        const double n{0.001};          // Value of 0.001 for learning rate chosen to ensure stable convergence
         const int epochs{1000};         // epochs - training iterations. Defines the number of passes over the dataset
 
     // 1 == DATA LOADER
@@ -273,33 +290,44 @@ struct MLR_gradient{
 // TOOL 3 == Pearson Correlation Coefficient
 //============================================
 
+// Standalone function to quanitfy the linear strenght between two datasets
+// Single-pass summation algorithm
 double pearson_correlation(const std::vector<double>& x, const std::vector<double>& y) {
     size_t n{x.size()};
 
+    // Initialises the accumulators using uniform brace initialisation
+    // Stores the immediate sums required for Pearson formula
     double sumXY{0.0};
     double sumX{0.0};
     double sumY{0.0};
     double sumX_squared{0.0};
     double sumY_squared{0.0};
 
+   
+    // Calculate the numerator and denominator using single iteration loop
+    // Reduces complexity to 0(n) & improves CPU cache locality
     for(size_t i=0; i < n; i++) {
-        sumXY += x[i] * y[i];
-        sumX += x[i];
-        sumY += y[i];
-        sumX_squared += x[i] * x[i];
-        sumY_squared += y[i] * y[i];
+        sumXY += x[i] * y[i];           // Sum of products
+        sumX += x[i];                   // Sum of x
+        sumY += y[i];                   // Sum of y
+        sumX_squared += x[i] * x[i];    // Sum of squares (x)
+        sumY_squared += y[i] * y[i];    // Sum of squares (y)
     }
-
-    // Calculate the numerator and denominator
+    
+    // Numerator calculation
     double num{(n * sumXY) - (sumX * sumY)};
+    // Denominator Calculation
     double den{std::sqrt((n * sumX_squared - (sumX*sumX)) * (n * sumY_squared - (sumY*sumY)))};
 
-    // Safety Check
+    // SSAFETY CHECK
+    // Prevent division by 0 (undefined correlation)
+    // Occurs if there is 0 variance (if all x or all y values are identical)
      if(den == 0.0) {
         std::cout << "Error: Cannot calculate correlation as denominator is zero.\n";
         return 0.0;
     }
 
+    // Return the normalised coefficient 'r'
     double r{num / den};
     return r;
 }
