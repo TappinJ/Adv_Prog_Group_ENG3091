@@ -71,6 +71,17 @@ struct SLR_equation
     std::cout << "Slope w* = " << w_star << std::endl;
     std::cout << "Intercept b* = "<< b_star << std::endl;
     }
+
+        //3 == PREDICTION FUNCTION - So that data can exported to a table for Python plotting
+std::vector<double> predict(){
+    std::vector<double> predictions;
+    // Loop through every value and calculate the predicted y
+    for(size_t i=0; i<x.size(); ++i){
+        double y_pred = (w_star*x[i] + b_star);
+        predictions.push_back(y_pred);
+    }
+    return predictions;
+}   
 };
 
 

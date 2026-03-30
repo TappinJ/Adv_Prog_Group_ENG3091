@@ -1,8 +1,10 @@
 #include "gradient_combined.h"
 #include "metrics.h"
+#include "results_export.h"
 #include <iomanip>
 #include <vector>
 #include <iostream>
+
 
 int main() {
     MLR_gradient solver;
@@ -39,6 +41,9 @@ std::cout << "Equation: y = (" << final_w1 << ")x1 + ("
 // Display the accurace as % (using R^2)
 // Multiplying by 100 to convert to %
 std::cout <<"Model predictability:" <<(Rsquared*100.0) << "%" << std::endl;
+
+// 7 - Saving the results table 
+MLR_export(solver.x1, solver.x2, solver.y, predictions);
     
     return 0;
 }

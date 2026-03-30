@@ -5,17 +5,21 @@
 #include "gradient_combined.h"
 #include "numerical_method_slr.h"
 #include "metrics.h"
+#include "results_export.h"
+
 
 int main(){
     // 1 == Equation Solver (Analytical)
     SLR_equation normal;
     normal.dataset();
     normal.solve();
+    std::vector<double> pred_equation = normal.predict();
 
     // 2 == Gradient Solver (Iterative)
     SLR_gradient gradient;
     gradient.dataset();
     gradient.solve();
+    std::vector<double> pred_gradient = gradient.predict();
 
     // 3 == Math Comparison
     double w_error = std::abs(normal.w_star - gradient.w);
@@ -38,6 +42,10 @@ int main(){
     
     // Multiply R^2 value by 100 to output %
     std::cout << "Model Predictability: " << (Rsquared * 100.0) << "%" << std::endl;
+
+    // 6 - Saving the results data file 
+    SLR_export(gradient.x, gradient.y, pred_gradient, "SLR_results_gradient.csv");
+    SLR_export(normal.x, normal.y, pred_equation, "SLR_results_equation.csv");
     
     return 0;
 }
